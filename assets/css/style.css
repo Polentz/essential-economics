@@ -102,9 +102,9 @@ body {
 }
 
 /* Links in this chapter are white through --link-color (see Links below) */
-.chapter#contacts span {
+/* .chapter#contacts span {
     color: var(--color-white);
-}
+} */
 
 .chapter-inner {
     width: 100%;
@@ -152,20 +152,20 @@ body {
 .chapter-text a,
 .chapter-note a {
     --link-color: var(--color-black);
-    --link-hover-text: var(--color-white);
+    --link-hover-text: var(--color-grey);
     padding: 0 0.15em;
     margin: 0 -0.15em;
     color: var(--link-color);
     background-image:
         linear-gradient(var(--link-color), var(--link-color)),
         linear-gradient(var(--link-color), var(--link-color));
-    background-size: 100% 2px, 100% 0;
+    background-size: 100% 1px, 100% 0;
     background-position: 0 100%, 0 100%;
     background-repeat: no-repeat;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
     transition:
-        background-size 0.4s cubic-bezier(0.65, 0, 0.35, 1),
+        background-size 0.2s cubic-bezier(0.65, 0, 0.35, 1),
         color 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
@@ -181,7 +181,7 @@ body {
 .chapter-note a:hover,
 .chapter-note a:focus-visible {
     color: var(--link-hover-text);
-    background-size: 100% 2px, 100% 100%;
+    background-size: 0 1px, 100% 0;
 }
 
 .chapter-text a:focus-visible,
@@ -190,10 +190,10 @@ body {
     outline-offset: 4px;
 }
 
-.chapter#contacts a {
+/* .chapter#contacts a {
     --link-color: var(--color-white);
     --link-hover-text: var(--color-blue);
-}
+} */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -248,8 +248,8 @@ body {
 .button:hover,
 .button:focus-visible {
     background-color: var(--color-white);
-    color: var(--color-black);
-    outline: solid 1px var(--color-black);
+    color: var(--color-grey);
+    outline: solid 1px var(--color-grey);
 }
 
 /* Mobile: logo becomes a top band, chapters fill the rest */
