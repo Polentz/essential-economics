@@ -53,7 +53,7 @@ body {
     height: auto;
 }
 
-.logo svg {
+.logo {
     fill: var(--color-black);
 }
 

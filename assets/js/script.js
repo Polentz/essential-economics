@@ -21,17 +21,34 @@ window.addEventListener("resize", () => {
 
 const chapters = gsap.utils.toArray(".chapter");
 const brand = document.querySelector(".layout-brand");
+const logo = brand.querySelector(".logo");
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const duration = reduceMotion ? 0 : 0.8;
 
-// data-color holds "var(--color-x)": resolve it to a real color GSAP can tween
-const chapterColor = (chapter) => {
-    const variable = chapter.dataset.color.match(/--[\w-]+/)[0];
+// Colors are written as "var(--color-x)": resolve them to real colors GSAP can tween
+const resolveColor = (value) => {
+    const variable = value.match(/--[\w-]+/)[0];
     return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
 };
 
-gsap.set(brand, { backgroundColor: chapterColor(chapters[0]) });
+// Optional per-chapter data-background, data-foreground and data-logo fall back to these
+const defaultColors = {
+    background: resolveColor("var(--color-white)"),
+    foreground: resolveColor("var(--color-black)"),
+    logo: resolveColor("var(--color-black)"),
+};
+
+const chapterColors = (chapter) => ({
+    brand: resolveColor(chapter.dataset.color),
+    background: chapter.dataset.background ? resolveColor(chapter.dataset.background) : defaultColors.background,
+    foreground: chapter.dataset.foreground ? resolveColor(chapter.dataset.foreground) : defaultColors.foreground,
+    logo: chapter.dataset.logo ? resolveColor(chapter.dataset.logo) : defaultColors.logo,
+});
+
+const firstColors = chapterColors(chapters[0]);
+gsap.set(brand, { backgroundColor: firstColors.brand });
+gsap.set(logo, { fill: firstColors.logo });
 
 /* Snap: after a natural scroll ends, settle on the next chapter in the scroll direction.
    Chapters taller than the viewport scroll freely until their bottom is visible, then stick. */
@@ -119,20 +136,28 @@ ScrollTrigger.create({
 
 chapters.forEach((chapter) => {
     const inner = chapter.querySelector(".chapter-inner");
+    const colors = chapterColors(chapter);
+    const tween = { duration, ease: "power2.inOut", overwrite: "auto" };
+    const hasOwnColors = chapter.dataset.background || chapter.dataset.foreground;
 
     ScrollTrigger.create({
         trigger: chapter,
         start: "top center",
         end: "bottom center",
         onToggle: ({ isActive }) => {
+            // Chapters with their own colors switch in when active and back out when left
+            if (hasOwnColors) {
+                gsap.to(chapter, {
+                    backgroundColor: isActive ? colors.background : defaultColors.background,
+                    color: isActive ? colors.foreground : defaultColors.foreground,
+                    ...tween,
+                });
+            }
+
             if (!isActive) return;
 
-            gsap.to(brand, {
-                backgroundColor: chapterColor(chapter),
-                duration,
-                ease: "power2.inOut",
-                overwrite: "auto",
-            });
+            gsap.to(brand, { backgroundColor: colors.brand, ...tween });
+            gsap.to(logo, { fill: colors.logo, ...tween });
         },
     });
 
