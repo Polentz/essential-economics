@@ -18,10 +18,6 @@ body {
     white-space: nowrap;
 }
 
-html {
-    scroll-snap-type: y mandatory;
-}
-
 body {
     color: var(--color-black);
     background-color: var(--color-white);
@@ -67,8 +63,6 @@ body {
     position: sticky;
     top: 0;
     min-height: var(--doc-height);
-    /* scroll-snap-align: start;
-    scroll-snap-stop: always; */
     display: flex;
     align-items: center;
     padding: 4rem;
@@ -210,10 +204,6 @@ body {
 /* Mobile: logo becomes a top band, chapters fill the rest */
 
 @media (max-width: 768px) {
-    html {
-        scroll-padding-top: calc(var(--doc-height) * 0.3);
-    }
-
     .layout {
         grid-template-columns: 1fr;
     }
@@ -231,6 +221,7 @@ body {
     }
 
     .chapter {
+        top: calc(var(--doc-height) * 0.3);
         min-height: calc(var(--doc-height) * 0.7);
         padding: 1.5rem 1rem;
     }
