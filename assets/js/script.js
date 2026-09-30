@@ -161,6 +161,23 @@ chapters.forEach((chapter) => {
         },
     });
 
+    // // Chapters with their own colors switch in only once fully scrolled into view
+    // // (top reaching the top of the visible area, just a hair early so the last chapter still fires)
+    // if (hasOwnColors) {
+    //     ScrollTrigger.create({
+    //         trigger: chapter,
+    //         start: () => `top ${brandOffset() + 2}px`,
+    //         end: "bottom top",
+    //         onToggle: ({ isActive }) => {
+    //             gsap.to(chapter, {
+    //                 backgroundColor: isActive ? colors.background : defaultColors.background,
+    //                 color: isActive ? colors.foreground : defaultColors.foreground,
+    //                 ...tween,
+    //             });
+    //         },
+    //     });
+    // }
+
     if (!reduceMotion) {
         gsap.from(inner, {
             autoAlpha: 0,
@@ -174,4 +191,38 @@ chapters.forEach((chapter) => {
             },
         });
     }
+});
+
+/* Preview: links with data-preview show that image over the brand column while hovered */
+
+gsap.utils.toArray("[data-preview]").forEach((link) => {
+    const preview = document.createElement("figure");
+    preview.className = "brand-preview";
+
+    const image = document.createElement("img");
+    image.src = link.dataset.preview;
+    image.alt = "";
+    preview.appendChild(image);
+
+    // Optional data-preview-credit shows a caption over the image
+    if (link.dataset.previewCredit) {
+        const credit = document.createElement("figcaption");
+        credit.textContent = link.dataset.previewCredit;
+        preview.appendChild(credit);
+    }
+
+    brand.appendChild(preview);
+
+    const show = () => {
+        const options = { duration: reduceMotion ? 0 : 0.6, ease: "power2.out", overwrite: "auto" };
+        gsap.to(preview, { autoAlpha: 1, ...options });
+        gsap.fromTo(image, { scale: reduceMotion ? 1 : 1 }, { scale: 1, ...options });
+    };
+    const hide = () =>
+        gsap.to(preview, { autoAlpha: 0, duration: reduceMotion ? 0 : 0.4, ease: "power2.inOut", overwrite: "auto" });
+
+    link.addEventListener("mouseenter", show);
+    link.addEventListener("mouseleave", hide);
+    link.addEventListener("focus", show);
+    link.addEventListener("blur", hide);
 });
