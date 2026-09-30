@@ -4,10 +4,9 @@ html {
 
 html,
 body {
-    font-family: "Inter", sans-serif;
-    font-weight: 400;
+    font-family: "acumin-pro-wide", sans-serif;
+    font-weight: 500;
     font-style: normal;
-    font-size: 24px;
 }
 
 .visually-hidden {
@@ -17,4 +16,199 @@ body {
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+}
+
+body {
+    overflow: hidden;
+    color: var(--color-black);
+    background-color: var(--color-white);
+}
+
+/* Layout */
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: var(--doc-height);
+}
+
+.layout__content {
+    position: relative;
+    height: var(--doc-height);
+    overflow: hidden;
+}
+
+.layout__brand {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: var(--doc-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-white);
+    background-color: var(--color-blue);
+}
+
+.logo {
+    width: min(40%, 320px);
+    height: auto;
+}
+
+/* Chapters */
+
+.chapters {
+    will-change: transform;
+}
+
+.chapter {
+    height: var(--doc-height);
+    display: flex;
+    align-items: center;
+    padding: 2.5rem 4rem;
+}
+
+.chapter__inner {
+    width: 100%;
+    max-width: 32rem;
+}
+
+.chapter__index {
+    display: block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+}
+
+.chapter__title {
+    font-family: "acumin-pro-wide", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    margin-bottom: 1.5rem;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+}
+
+.chapter__text {
+    font-size: 1.125rem;
+    line-height: 1.5;
+}
+
+/* Subscribe form */
+
+.subscribe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.subscribe-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.subscribe-form input {
+    padding: 0.75rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-black);
+    border-radius: 0;
+    font: inherit;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.subscribe-form input:focus-visible {
+    border-bottom-color: var(--color-green);
+    box-shadow: 0 1px 0 var(--color-green);
+}
+
+.button {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    padding: 0.875rem 2rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--color-white);
+    background-color: var(--color-black);
+    border-radius: 999px;
+    transition: background-color 0.3s;
+}
+
+.button:hover,
+.button:focus-visible {
+    background-color: var(--color-green);
+}
+
+/* Events & contacts */
+
+.event-list__item,
+.contact-list__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid currentColor;
+}
+
+.event-list__item:last-child,
+.contact-list__item:last-child {
+    border-bottom: 1px solid currentColor;
+}
+
+.event-list time,
+.event-list__place,
+.contact-list__label {
+    font-size: 0.875rem;
+    opacity: 0.6;
+}
+
+.event-list__name {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.contact-list a {
+    font-size: 1.125rem;
+}
+
+.contact-list a:hover,
+.contact-list a:focus-visible {
+    text-decoration: underline;
+}
+
+/* Mobile: logo becomes a top band, chapters fill the rest */
+
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 30% 1fr;
+    }
+
+    .layout__brand {
+        position: relative;
+        grid-row: 1;
+        width: 100%;
+        height: 100%;
+    }
+
+    .layout__content {
+        grid-row: 2;
+        height: 100%;
+    }
+
+    .chapter {
+        height: calc(var(--doc-height) * 0.7);
+        padding: 1.5rem 1rem;
+    }
+
+    .logo {
+        width: auto;
+        height: 60%;
+    }
 }

@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Essential Economics</title>
     <meta name="description" content="">
-    <link rel="stylesheet" href="https://use.typekit.net/gof7fem.css">
+    <link rel="stylesheet" href="https://use.typekit.net/aqq5tpq.css">
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollSmoother.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Observer.min.js"></script>
     <script src="assets/js/script.js" defer></script>
 </head>
 
@@ -21,8 +22,95 @@
         <h1 class="visually-hidden">Essential Economics</h1>
     </header>
 
-    <main>
+    <main class="layout">
+        <div class="layout__content">
+            <div class="chapters">
+                <section class="chapter" id="introduction" data-color="var(--color-blue)"
+                    aria-labelledby="introduction-title">
+                    <div class="chapter__inner">
+                        <span class="chapter__index">01</span>
+                        <h2 class="chapter__title" id="introduction-title">Economics, made essential</h2>
+                        <p class="chapter__text">
+                            Clear, independent analysis of the forces shaping markets, policy and everyday life.
+                            No jargon, no noise — just the ideas that matter, explained with care.
+                        </p>
+                    </div>
+                </section>
 
+                <section class="chapter" id="subscribe" data-color="var(--color-green)"
+                    aria-labelledby="subscribe-title">
+                    <div class="chapter__inner">
+                        <span class="chapter__index">02</span>
+                        <h2 class="chapter__title" id="subscribe-title">Subscribe</h2>
+                        <p class="chapter__text">Get our weekly briefing straight to your inbox.</p>
+                        <form class="subscribe-form" action="#" method="post">
+                            <div class="subscribe-form__field">
+                                <label for="subscribe-name">Name</label>
+                                <input type="text" id="subscribe-name" name="name" autocomplete="name" required>
+                            </div>
+                            <div class="subscribe-form__field">
+                                <label for="subscribe-email">Email</label>
+                                <input type="email" id="subscribe-email" name="email" autocomplete="email" required>
+                            </div>
+                            <button type="submit" class="button">Subscribe</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="chapter" id="events" data-color="var(--color-purple)" aria-labelledby="events-title">
+                    <div class="chapter__inner">
+                        <span class="chapter__index">03</span>
+                        <h2 class="chapter__title" id="events-title">Upcoming events</h2>
+                        <ul class="event-list">
+                            <li class="event-list__item">
+                                <time datetime="2026-10-14">14 Oct 2026</time>
+                                <span class="event-list__name">Inflation after the shock</span>
+                                <span class="event-list__place">London</span>
+                            </li>
+                            <li class="event-list__item">
+                                <time datetime="2026-11-05">5 Nov 2026</time>
+                                <span class="event-list__name">The economics of energy transition</span>
+                                <span class="event-list__place">Milan</span>
+                            </li>
+                            <li class="event-list__item">
+                                <time datetime="2026-12-02">2 Dec 2026</time>
+                                <span class="event-list__name">Trade, tariffs and supply chains</span>
+                                <span class="event-list__place">Online</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="chapter" id="contacts" data-color="var(--color-black)" aria-labelledby="contacts-title">
+                    <div class="chapter__inner">
+                        <span class="chapter__index">04</span>
+                        <h2 class="chapter__title" id="contacts-title">Contacts</h2>
+                        <ul class="contact-list">
+                            <li class="contact-list__item">
+                                <span class="contact-list__label">General</span>
+                                <a href="mailto:hello@essentialeconomics.com">hello@essentialeconomics.com</a>
+                            </li>
+                            <li class="contact-list__item">
+                                <span class="contact-list__label">Press</span>
+                                <a href="mailto:press@essentialeconomics.com">press@essentialeconomics.com</a>
+                            </li>
+                            <li class="contact-list__item">
+                                <span class="contact-list__label">Phone</span>
+                                <a href="tel:+390000000000">+39 000 000 0000</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <aside class="layout__brand" aria-hidden="true">
+            <svg class="logo" viewBox="0 0 200 200" role="img">
+                <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="4" />
+                <text x="100" y="100" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif"
+                    font-size="72" font-weight="700" fill="currentColor">EE</text>
+            </svg>
+        </aside>
     </main>
 </body>
 
