@@ -48,13 +48,19 @@ body {
     border-left: 1px solid var(--color-black);
 }
 
-.logo {
+.logo,
+.logo-mobile {
     width: min(55%, 500px);
     height: auto;
 }
 
-.logo {
+.logo,
+.logo-mobile {
     fill: var(--color-black);
+}
+
+.mobile-brand {
+    display: none;
 }
 
 /* Image shown in the brand column while hovering a [data-preview] link */
@@ -246,43 +252,6 @@ body {
     outline: solid 1px var(--color-black);
 }
 
-/* Events & contacts */
-
-.event-list-item,
-.contact-list-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 1.25rem 0;
-    /* border-top: 1px solid currentColor; */
-}
-
-/* .event-list-item:last-child,
-.contact-list-item:last-child {
-    border-bottom: 1px solid currentColor;
-} */
-
-.event-list time,
-.event-list-place,
-.contact-list-label {
-    font-size: 0.875rem;
-    opacity: 0.6;
-}
-
-.event-list-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-}
-
-.contact-list a {
-    font-size: 1.125rem;
-}
-
-.contact-list a:hover,
-.contact-list a:focus-visible {
-    text-decoration: underline;
-}
-
 /* Mobile: logo becomes a top band, chapters fill the rest */
 
 @media (max-width: 768px) {
@@ -292,10 +261,9 @@ body {
 
     .layout-brand {
         position: sticky;
-        z-index: 1;
+        z-index: -1;
         grid-row: 1;
         width: 100%;
-        height: calc(var(--doc-height) * 0.3);
     }
 
     .layout-content {
@@ -303,13 +271,32 @@ body {
     }
 
     .chapter {
-        top: calc(var(--doc-height) * 0.3);
-        min-height: calc(var(--doc-height) * 0.7);
-        padding: 1.5rem 1rem;
+        width: calc(100% - 4rem);
+        padding: 2rem 1rem;
+        margin: 0 auto;
+    }
+
+    .chapter-text {
+        gap: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .chapter-note {
+        font-size: 0.75rem;
     }
 
     .logo {
-        width: auto;
-        height: 60%;
+        visibility: hidden;
+    }
+
+    .mobile-brand {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: calc(var(--doc-height) - 6rem);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-white);
     }
 }

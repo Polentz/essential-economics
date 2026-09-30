@@ -46,11 +46,36 @@ const chapterColors = (chapter) => ({
     brandBackground: chapter.dataset.brandBackground
         ? resolveColor(chapter.dataset.brandBackground)
         : defaultColors.brandBackground,
+    hasBrandBackground: Boolean(chapter.dataset.brandBackground),
 });
 
-const firstColors = chapterColors(chapters[0]);
-gsap.set(logo, { fill: firstColors.logo });
-gsap.set(brand, { backgroundColor: firstColors.brandBackground });
+// Desktop: white column, logo in the chapter color.
+// Mobile: the brand band takes the chapter color (or its data-brand-background), logo in white.
+const mobileQuery = window.matchMedia("(max-width: 768px)");
+
+const brandStyles = (colors) =>
+    mobileQuery.matches
+        ? {
+              logo: { fill: defaultColors.background },
+              brand: { backgroundColor: colors.hasBrandBackground ? colors.brandBackground : colors.logo },
+          }
+        : {
+              logo: { fill: colors.logo },
+              brand: { backgroundColor: colors.brandBackground },
+          };
+
+let activeColors = chapterColors(chapters[0]);
+
+const applyBrandColors = (colors, tween) => {
+    activeColors = colors;
+    const styles = brandStyles(colors);
+    const apply = tween ? gsap.to : gsap.set;
+    apply(logo, { ...styles.logo, ...tween });
+    apply(brand, { ...styles.brand, ...tween });
+};
+
+applyBrandColors(activeColors);
+mobileQuery.addEventListener("change", () => applyBrandColors(activeColors));
 
 /* Snap: after a natural scroll ends, settle on the next chapter in the scroll direction.
    Chapters taller than the viewport scroll freely until their bottom is visible, then stick. */
@@ -64,26 +89,30 @@ let freeRanges = [];
 let freeZoneBuffer = 0;
 let snapToChapter = (value) => value;
 
-// On mobile the sticky brand band covers the top of the viewport
-const brandOffset = () => (getComputedStyle(brand).position === "sticky" ? brand.offsetHeight : 0);
+// Where chapters stick, as set by the CSS `top` (0 on desktop, below the logo on mobile)
+let stickyOffset = 0;
 
 // Tall chapters stick by their bottom edge: negative top = visible height - chapter height
 const setChapterStickyTops = () => {
-    const offset = brandOffset();
-    const visibleHeight = window.innerHeight - offset;
+    // Clear inline tops first so the CSS value can be read
+    chapters.forEach((chapter) => (chapter.style.top = ""));
+    stickyOffset = parseFloat(getComputedStyle(chapters[0]).top) || 0;
+
+    const visibleHeight = window.innerHeight - stickyOffset;
 
     chapters.forEach((chapter) => {
         const excess = chapter.offsetHeight - visibleHeight;
-        chapter.style.top = excess > 0 ? `${offset - excess}px` : "";
+        if (excess > 1) chapter.style.top = `${stickyOffset - excess}px`;
     });
 };
 
 // Chapters are sticky, so their live position is unreliable: stack their heights instead
 const measureChapters = () => {
-    const visibleHeight = window.innerHeight - brandOffset();
-    let y = chaptersWrapper.getBoundingClientRect().top + window.scrollY - brandOffset();
+    const visibleHeight = window.innerHeight - stickyOffset;
+    let y = chaptersWrapper.getBoundingClientRect().top + window.scrollY - stickyOffset;
 
-    snapPoints = [];
+    // The top of the page is always a resting point (on mobile it shows the full-screen logo)
+    snapPoints = y > 0 ? [0] : [];
     freeRanges = [];
     freeZoneBuffer = visibleHeight * FREE_ZONE_BUFFER;
 
@@ -91,7 +120,7 @@ const measureChapters = () => {
         const excess = chapter.offsetHeight - visibleHeight;
         snapPoints.push(y);
 
-        if (excess > 0) {
+        if (excess > 1) {
             snapPoints.push(y + excess);
             freeRanges.push([y, y + excess]);
         }
@@ -136,6 +165,15 @@ ScrollTrigger.create({
     },
 });
 
+// Back above the first chapter (on mobile: the full-screen logo), restore the first chapter's colors
+ScrollTrigger.create({
+    trigger: chaptersWrapper,
+    start: "top center",
+    end: "max",
+    onLeaveBack: () =>
+        applyBrandColors(chapterColors(chapters[0]), { duration, ease: "power2.inOut", overwrite: "auto" }),
+});
+
 chapters.forEach((chapter) => {
     const inner = chapter.querySelector(".chapter-inner");
     const colors = chapterColors(chapter);
@@ -158,8 +196,7 @@ chapters.forEach((chapter) => {
 
             if (!isActive) return;
 
-            gsap.to(logo, { fill: colors.logo, ...tween });
-            gsap.to(brand, { backgroundColor: colors.brandBackground, ...tween });
+            applyBrandColors(colors, tween);
         },
     });
 
@@ -168,7 +205,7 @@ chapters.forEach((chapter) => {
     // if (hasOwnColors) {
     //     ScrollTrigger.create({
     //         trigger: chapter,
-    //         start: () => `top ${brandOffset() + 2}px`,
+    //         start: () => `top ${stickyOffset + 2}px`,
     //         end: "bottom top",
     //         onToggle: ({ isActive }) => {
     //             gsap.to(chapter, {
