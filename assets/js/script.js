@@ -17,7 +17,7 @@ window.addEventListener("resize", () => {
     documentHeight();
 });
 
-/* Chapters: native scroll, brand column changes color as each chapter appears */
+/* Chapters: native scroll, the logo takes each chapter's data-color as it appears */
 
 const chapters = gsap.utils.toArray(".chapter");
 const brand = document.querySelector(".layout-brand");
@@ -32,23 +32,25 @@ const resolveColor = (value) => {
     return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
 };
 
-// Optional per-chapter data-background, data-foreground and data-logo fall back to these
+// Optional per-chapter data-background, data-foreground and data-brand-background fall back to these
 const defaultColors = {
     background: resolveColor("var(--color-white)"),
     foreground: resolveColor("var(--color-black)"),
-    logo: resolveColor("var(--color-black)"),
+    brandBackground: resolveColor("var(--color-white)"),
 };
 
 const chapterColors = (chapter) => ({
-    brand: resolveColor(chapter.dataset.color),
+    logo: resolveColor(chapter.dataset.color),
     background: chapter.dataset.background ? resolveColor(chapter.dataset.background) : defaultColors.background,
     foreground: chapter.dataset.foreground ? resolveColor(chapter.dataset.foreground) : defaultColors.foreground,
-    logo: chapter.dataset.logo ? resolveColor(chapter.dataset.logo) : defaultColors.logo,
+    brandBackground: chapter.dataset.brandBackground
+        ? resolveColor(chapter.dataset.brandBackground)
+        : defaultColors.brandBackground,
 });
 
 const firstColors = chapterColors(chapters[0]);
-gsap.set(brand, { backgroundColor: firstColors.brand });
 gsap.set(logo, { fill: firstColors.logo });
+gsap.set(brand, { backgroundColor: firstColors.brandBackground });
 
 /* Snap: after a natural scroll ends, settle on the next chapter in the scroll direction.
    Chapters taller than the viewport scroll freely until their bottom is visible, then stick. */
@@ -156,8 +158,8 @@ chapters.forEach((chapter) => {
 
             if (!isActive) return;
 
-            gsap.to(brand, { backgroundColor: colors.brand, ...tween });
             gsap.to(logo, { fill: colors.logo, ...tween });
+            gsap.to(brand, { backgroundColor: colors.brandBackground, ...tween });
         },
     });
 

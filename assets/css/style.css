@@ -86,8 +86,8 @@ body {
 /* Chapters */
 
 .chapter {
-    position: sticky;
-    top: 0;
+    /* position: sticky;
+    top: 0; */
     min-height: var(--doc-height);
     display: flex;
     align-items: center;
