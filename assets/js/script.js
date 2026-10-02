@@ -1,6 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
-const chapters = gsap.utils.toArray(".chapter");
+const chapters = gsap.utils.toArray(".content-section");
 const lastChapter = chapters[chapters.length - 1];
 const brand = document.querySelector(".layout-brand");
 
@@ -150,7 +150,7 @@ mobileQuery.addEventListener("change", () => {
 
 if (!reduceMotion) {
     chapters.forEach((chapter) => {
-        gsap.from(chapter.querySelector(".chapter-inner"), {
+        gsap.from(chapter.querySelector(".content-section-inner"), {
             autoAlpha: 0,
             y: 40,
             duration: 1,
@@ -238,7 +238,7 @@ if (!reduceMotion) {
 
 gsap.utils.toArray("[data-preview]").forEach((link) => {
     const preview = document.createElement("figure");
-    preview.className = "brand-preview";
+    preview.className = "hover-image";
 
     const image = document.createElement("img");
     image.src = link.dataset.preview;

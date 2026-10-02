@@ -27,7 +27,7 @@ body {
     width: 100%;
     position: fixed;
     top: 0;
-    z-index: 1000;
+    z-index: 990;
     background-color: var(--color-white);
     padding: 2rem 5vw;
 }
@@ -101,9 +101,7 @@ body {
     display: none;
 }
 
-/* Image shown in the brand column while hovering a [data-preview] link */
-
-.brand-preview {
+.hover-image {
     position: absolute;
     inset: 0;
     overflow: hidden;
@@ -114,14 +112,14 @@ body {
     z-index: 1000;
 }
 
-.brand-preview img {
+.hover-image img {
     width: 100%;
     height: 100%;
     -o-object-fit: cover;
     object-fit: cover;
 }
 
-.brand-preview figcaption {
+.hover-image figcaption {
     position: absolute;
     left: 1.5rem;
     bottom: 1.5rem;
@@ -130,9 +128,9 @@ body {
     text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
 }
 
-/* Chapters */
+/* content-sections */
 
-.chapter {
+.content-section {
     min-height: var(--doc-height);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -144,7 +142,7 @@ body {
     background-color: var(--color-white);
 }
 
-.chapter-inner {
+.content-section-inner {
     width: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -156,14 +154,14 @@ body {
     gap: 40px;
 }
 
-.chapter-headline {
+.content-section-headline {
     display: block;
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
 
-.chapter-title {
+.content-section-title {
     font-family: "acumin-pro-wide", sans-serif;
     font-weight: 500;
     font-style: normal;
@@ -172,7 +170,7 @@ body {
     line-height: 1.05;
 }
 
-.chapter-text {
+.content-section-text {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -185,7 +183,7 @@ body {
     line-height: 1.5;
 }
 
-.chapter-note {
+.content-section-note {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -200,8 +198,8 @@ body {
 
 /* Links: colored with a resting underline; on hover the underline fills up behind the text */
 
-.chapter-text a,
-.chapter-note a {
+.content-section-text a,
+.content-section-note a {
     --link-color: var(--color-black);
     --link-hover-text: var(--color-grey);
     padding: 0 0.15em;
@@ -223,31 +221,31 @@ body {
         color 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.chapter-text a:link,
-.chapter-text a:visited,
-.chapter-note a:link,
-.chapter-note a:visited {
+.content-section-text a:link,
+.content-section-text a:visited,
+.content-section-note a:link,
+.content-section-note a:visited {
     color: var(--link-color);
 }
 
-.chapter-text a:hover,
-.chapter-text a:focus-visible,
-.chapter-note a:hover,
-.chapter-note a:focus-visible {
+.content-section-text a:hover,
+.content-section-text a:focus-visible,
+.content-section-note a:hover,
+.content-section-note a:focus-visible {
     color: var(--link-hover-text);
     background-size: 0 1px, 100% 0;
 }
 
-.chapter-text a:focus-visible,
-.chapter-note a:focus-visible {
+.content-section-text a:focus-visible,
+.content-section-note a:focus-visible {
     outline: 2px solid var(--link-color);
     outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-    .chapter-text a,
-    .chapter-note a {
+    .content-section-text a,
+    .content-section-note a {
         -webkit-transition: none;
         transition: none;
     }
@@ -351,7 +349,7 @@ body {
         grid-row: 2;
     }
 
-    .chapter {
+    .content-section {
         -webkit-box-align: start;
         -ms-flex-align: start;
         align-items: start;
@@ -359,47 +357,20 @@ body {
 
     }
 
-    .chapter-inner {
+    .content-section-inner {
         gap: 2rem;
     }
 
-    .chapter-headline {
+    .content-section-headline {
         font-size: smaller;
     }
 
-    .chapter-text {
+    .content-section-text {
         gap: 0.5rem;
         font-size: 1rem;
     }
 
-    .chapter-note {
+    .content-section-note {
         font-size: 1rem;
     }
-
-    /* .mobile-brand {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: var(--doc-height);
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        background-color: var(--color-white);
-    }
-
-    .mobile-ui {
-        position: absolute;
-        bottom: 1rem;
-        left: 0;
-        width: 100%;
-        font-size: smaller;
-        text-align: center;
-        text-transform: uppercase;
-    } */
 }
