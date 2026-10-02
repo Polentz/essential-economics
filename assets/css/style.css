@@ -38,10 +38,12 @@ body {
 }
 
 .layout-brand {
-    position: fixed;
+    /* position: fixed;
     top: 0;
     right: 0;
-    width: 50%;
+    width: 50%; */
+    position: sticky;
+    top: 0;
     height: var(--doc-height);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -54,18 +56,23 @@ body {
     justify-content: center;
     color: var(--color-white);
     background-color: var(--color-white);
-    border-left: 1px solid var(--color-black);
+    /* border-left: 1px solid var(--color-black); */
 }
 
-.logo,
+/* .logo,
 .logo-mobile {
     width: min(55%, 500px);
     height: auto;
-}
+} */
 
 .logo,
 .logo-mobile {
     fill: var(--color-black);
+}
+
+/* Let logo bars drift outside the SVG box during the parallax */
+.logo {
+    overflow: visible;
 }
 
 .mobile-brand {
@@ -111,7 +118,7 @@ body {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: 4rem;
+    padding: 5vw;
     background-color: var(--color-white);
 }
 
