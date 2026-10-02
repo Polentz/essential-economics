@@ -167,11 +167,6 @@ body {
     background-color: var(--color-white);
 }
 
-/* Links in this chapter are white through --link-color (see Links below) */
-/* .chapter#contacts span {
-    color: var(--color-white);
-} */
-
 .chapter-inner {
     width: 100%;
     display: -webkit-box;
@@ -271,11 +266,6 @@ body {
     outline: 2px solid var(--link-color);
     outline-offset: 4px;
 }
-
-/* .chapter#contacts a {
-    --link-color: var(--color-white);
-    --link-hover-text: var(--color-blue);
-} */
 
 @media (prefers-reduced-motion: reduce) {
 

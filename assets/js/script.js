@@ -17,27 +17,12 @@ window.addEventListener("resize", () => {
     documentHeight();
 });
 
-/* Chapters: native scroll, the brand column takes each chapter's data-brand-background as it appears */
+/* Chapters */
 
 const chapters = gsap.utils.toArray(".chapter");
 const brand = document.querySelector(".layout-brand");
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const duration = reduceMotion ? 0 : 0.8;
-const colorTween = { duration, ease: "power2.inOut", overwrite: "auto" };
-
-// Colors are written as "var(--color-x)": resolve them to real colors GSAP can tween
-const resolveColor = (value) => {
-    const variable = value.match(/--[\w-]+/)[0];
-    return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
-};
-
-// Optional per-chapter data-brand-background, white otherwise
-const defaultBrandBackground = resolveColor("var(--color-white)");
-const brandBackground = (chapter) =>
-    chapter.dataset.brandBackground ? resolveColor(chapter.dataset.brandBackground) : defaultBrandBackground;
-
-gsap.set(brand, { backgroundColor: brandBackground(chapters[0]) });
 
 /* Long chapters: chapters taller than the viewport scroll until their bottom is visible, then stick. */
 
@@ -138,25 +123,24 @@ ScrollTrigger.create({
     },
 });
 
-// Back above the first chapter (on mobile: the full-screen logo), restore the first chapter's color
+// Last section: the brand column turns black (after a short delay) as it comes in,
+// and quickly back to white when leaving upward
+const cssColor = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const brandColorIn = { delay: reduceMotion ? 0 : 0.4, duration: reduceMotion ? 0 : 0.8, ease: "power2.inOut" };
+const brandColorOut = { duration: reduceMotion ? 0 : 0.3, ease: "power2.out" };
+
 ScrollTrigger.create({
-    trigger: chaptersWrapper,
+    trigger: chapters[chapters.length - 1],
     start: "top center",
-    end: "max",
-    onLeaveBack: () => gsap.to(brand, { backgroundColor: brandBackground(chapters[0]), ...colorTween }),
+    // overwrite: "auto" also cancels a pending delayed change if the direction flips quickly
+    onEnter: () =>
+        gsap.to(brand, { backgroundColor: cssColor("--color-black"), ...brandColorIn, overwrite: "auto" }),
+    onLeaveBack: () =>
+        gsap.to(brand, { backgroundColor: cssColor("--color-white"), ...brandColorOut, overwrite: "auto" }),
 });
 
 chapters.forEach((chapter) => {
     const inner = chapter.querySelector(".chapter-inner");
-
-    ScrollTrigger.create({
-        trigger: chapter,
-        start: "top center",
-        end: "bottom center",
-        onToggle: ({ isActive }) => {
-            if (isActive) gsap.to(brand, { backgroundColor: brandBackground(chapter), ...colorTween });
-        },
-    });
 
     if (!reduceMotion) {
         gsap.from(inner, {
@@ -166,7 +150,7 @@ chapters.forEach((chapter) => {
             ease: "power3.out",
             scrollTrigger: {
                 trigger: chapter,
-                start: "top 70%",
+                start: "top 100%",
                 toggleActions: "play none none reverse",
             },
         });
