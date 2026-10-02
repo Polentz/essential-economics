@@ -23,6 +23,21 @@ body {
     background-color: var(--color-white);
 }
 
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    /* display: flex;
+    justify-content: center; */
+    padding: 2rem 5vw;
+}
+
+.logo-header {
+    height: 1.5rem;
+    fill: var(--color-black);
+}
+
 /* Layout */
 
 .layout {
@@ -45,7 +60,7 @@ body {
     position: sticky;
     top: 0;
     height: var(--doc-height);
-    display: -webkit-box;
+    /* display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
@@ -53,9 +68,10 @@ body {
     align-items: center;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
-    justify-content: center;
+    justify-content: center; */
     color: var(--color-white);
     background-color: var(--color-white);
+    z-index: 999;
     /* border-left: 1px solid var(--color-black); */
 }
 
@@ -75,6 +91,33 @@ body {
     overflow: visible;
 }
 
+.logo-animation {
+    width: 100%;
+    position: relative;
+    z-index: 999;
+}
+
+.logo-footer {
+    width: 100%;
+    height: var(--doc-height);
+    position: absolute;
+    bottom: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.logo-footer svg {
+    width: min(55%, 500px);
+    fill: var(--color-white);
+}
+
 .mobile-brand {
     display: none;
 }
@@ -88,6 +131,8 @@ body {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    filter: grayscale(1) opacity(0.95);
+    z-index: 1000;
 }
 
 .brand-preview img {
@@ -141,7 +186,6 @@ body {
 
 .chapter-headline {
     display: block;
-    margin-bottom: 1.5rem;
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -151,7 +195,6 @@ body {
     font-family: "acumin-pro-wide", sans-serif;
     font-weight: 500;
     font-style: normal;
-    margin-bottom: 1.5rem;
     font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 700;
     line-height: 1.05;
