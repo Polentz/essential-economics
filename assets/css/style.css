@@ -340,6 +340,10 @@ body {
 
     }
 
+    .content-section:not(:last-of-type) {
+        min-height: unset;
+    }
+
     .content-section-inner {
         gap: 2rem;
     }
