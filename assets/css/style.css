@@ -28,8 +28,7 @@ body {
     position: fixed;
     top: 0;
     z-index: 1000;
-    /* display: flex;
-    justify-content: center; */
+    background-color: var(--color-white);
     padding: 2rem 5vw;
 }
 
@@ -53,48 +52,28 @@ body {
 }
 
 .layout-brand {
-    /* position: fixed;
-    top: 0;
-    right: 0;
-    width: 50%; */
     position: sticky;
     top: 0;
     height: var(--doc-height);
-    /* display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center; */
     color: var(--color-white);
     background-color: var(--color-white);
     z-index: 999;
-    /* border-left: 1px solid var(--color-black); */
 }
 
-/* .logo,
 .logo-mobile {
     width: min(55%, 500px);
     height: auto;
-} */
-
-.logo,
-.logo-mobile {
     fill: var(--color-black);
-}
-
-/* Let logo bars drift outside the SVG box during the parallax */
-.logo {
-    overflow: visible;
 }
 
 .logo-animation {
     width: 100%;
     position: relative;
     z-index: 999;
+}
+
+.logo-animation svg {
+    overflow: visible;
 }
 
 .logo-footer {
@@ -154,8 +133,6 @@ body {
 /* Chapters */
 
 .chapter {
-    /* position: sticky;
-    top: 0; */
     min-height: var(--doc-height);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -312,9 +289,9 @@ body {
 }
 
 .subscribe-form input:focus-visible {
-    border-bottom-color: var(--color-green);
-    -webkit-box-shadow: 0 1px 0 var(--color-green);
-    box-shadow: 0 1px 0 var(--color-green);
+    border-bottom-color: var(--color-black);
+    -webkit-box-shadow: 0 1px 0 var(--color-black);
+    box-shadow: 0 1px 0 var(--color-black);
 }
 
 .button {
@@ -338,16 +315,17 @@ body {
     outline: solid 1px var(--color-grey);
 }
 
-/* Mobile: logo becomes a top band, chapters fill the rest */
-
 @media (max-width: 768px) {
+    header {
+        padding: 2rem;
+    }
+
     .layout {
         -ms-grid-columns: 1fr;
         grid-template-columns: 1fr;
     }
 
     .layout-brand {
-        position: sticky;
         z-index: -1;
         -ms-grid-row: 1;
         grid-row: 1;
@@ -355,17 +333,19 @@ body {
     }
 
     .layout-content {
+        width: calc(100% - 4rem);
+        margin: 0 auto;
         -ms-grid-row: 2;
         grid-row: 2;
     }
 
     .chapter {
-        width: calc(100% - 4rem);
+
         -webkit-box-align: start;
         -ms-flex-align: start;
         align-items: start;
         padding: 2rem 1rem;
-        margin: 0 auto;
+
     }
 
     .chapter-inner {
@@ -385,11 +365,7 @@ body {
         font-size: 1rem;
     }
 
-    .logo {
-        visibility: hidden;
-    }
-
-    .mobile-brand {
+    /* .mobile-brand {
         position: absolute;
         top: 0;
         width: 100%;
@@ -414,5 +390,5 @@ body {
         font-size: smaller;
         text-align: center;
         text-transform: uppercase;
-    }
+    } */
 }

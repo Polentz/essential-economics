@@ -118,7 +118,7 @@ ScrollTrigger.create({
             return snapToChapter(value, self.direction);
         },
         duration: reduceMotion ? 0 : { min: 0.4, max: 0.9 },
-        delay: 0.1,
+        delay: 0.02, // start snapping right after the scroll ends, so motion doesn't pause and restart
         ease: "power2.inOut",
     },
 });
@@ -163,8 +163,8 @@ chapters.forEach((chapter) => {
 if (!reduceMotion) {
     // Multiplies every data-speed: higher = bars travel further (faster) for the same scroll
     const PARALLAX_STRENGTH = 2;
-    const logoSvg = document.querySelector(".logo");
-    const logoParts = gsap.utils.toArray(".logo [data-speed]");
+    const logoSvg = document.querySelector(".logo-animation svg");
+    const logoParts = gsap.utils.toArray(".logo-animation svg [data-speed]");
     const lastChapter = chapters[chapters.length - 1];
     const maxSpeed = Math.max(...logoParts.map((part) => Math.abs(parseFloat(part.dataset.speed))));
     let parallax;
@@ -194,7 +194,9 @@ if (!reduceMotion) {
             scrollTrigger: {
                 start: 0,
                 end: "max",
-                scrub: 0.5, // short smooth catch-up instead of following the scrollbar 1:1
+                // Follow the scroll exactly: the chapter snap already eases the scroll, and extra
+                // scrub smoothing on top of it makes the bars stutter while snapping
+                scrub: true,
             },
         });
 
