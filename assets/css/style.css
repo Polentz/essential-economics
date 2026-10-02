@@ -316,8 +316,19 @@ body {
 }
 
 @media (max-width: 768px) {
-    header {
-        padding: 2rem;
+
+    .header {
+        width: calc(100% - 4rem);
+        left: 2rem;
+        padding: 1rem;
+    }
+
+    .logo-header {
+        height: 3rem;
+    }
+
+    .logo-header .words {
+        display: none;
     }
 
     .layout {
@@ -326,6 +337,7 @@ body {
     }
 
     .layout-brand {
+        position: fixed;
         z-index: -1;
         -ms-grid-row: 1;
         grid-row: 1;
@@ -340,11 +352,10 @@ body {
     }
 
     .chapter {
-
         -webkit-box-align: start;
         -ms-flex-align: start;
         align-items: start;
-        padding: 2rem 1rem;
+        padding: 7rem 1rem 3.5rem 1rem;
 
     }
 

@@ -1,11 +1,19 @@
 gsap.registerPlugin(ScrollTrigger);
 
+const chapters = gsap.utils.toArray(".chapter");
+const lastChapter = chapters[chapters.length - 1];
+const brand = document.querySelector(".layout-brand");
+
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Viewport height as a CSS variable (--doc-height), stable on mobile browsers */
+
 const documentHeight = () => {
-    const doc = document.documentElement;
-    doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
+    document.documentElement.style.setProperty("--doc-height", `${window.innerHeight}px`);
 };
 
 documentHeight();
+window.addEventListener("resize", documentHeight);
 
 window.addEventListener("load", () => {
     history.scrollRestoration = "manual";
@@ -13,48 +21,13 @@ window.addEventListener("load", () => {
     ScrollTrigger.refresh();
 });
 
-window.addEventListener("resize", () => {
-    documentHeight();
-});
-
-/* Chapters */
-
-const chapters = gsap.utils.toArray(".chapter");
-const brand = document.querySelector(".layout-brand");
-
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* Long chapters: chapters taller than the viewport scroll until their bottom is visible, then stick. */
-
-const chaptersWrapper = document.querySelector(".chapters");
-
-// Where chapters stick, as set by the CSS `top` (0 on desktop, below the logo on mobile)
-let stickyOffset = 0;
-
-// Tall chapters stick by their bottom edge: negative top = visible height - chapter height
-const setChapterStickyTops = () => {
-    // Clear inline tops first so the CSS value can be read
-    chapters.forEach((chapter) => (chapter.style.top = ""));
-    stickyOffset = parseFloat(getComputedStyle(chapters[0]).top) || 0;
-
-    const visibleHeight = window.innerHeight - stickyOffset;
-
-    chapters.forEach((chapter) => {
-        const excess = chapter.offsetHeight - visibleHeight;
-        if (excess > 1) chapter.style.top = `${stickyOffset - excess}px`;
-    });
-};
-
-setChapterStickyTops();
-ScrollTrigger.addEventListener("refreshInit", setChapterStickyTops);
-
 // Web fonts change text heights: re-measure once they are in
 document.fonts.ready.then(() => ScrollTrigger.refresh());
 
 /* Snap: after a natural scroll ends, settle on the next chapter in the scroll direction.
-   Inside a long chapter scrolling stays free, so it can be read at its own pace. */
+   Chapters taller than the viewport are read freely, until their bottom reaches the bottom of the screen. */
 
-// Buffer around a tall chapter's reading area, as a share of the visible height:
+// Buffer around a tall chapter's reading area, as a share of the viewport height:
 // overshooting it slightly while reading returns to the tall chapter's edge
 const FREE_ZONE_BUFFER = 0.35;
 let freeRanges = [];
@@ -66,29 +39,26 @@ let snapToChapter = (value) => value;
 let gestureStart = 0;
 ScrollTrigger.addEventListener("scrollEnd", () => (gestureStart = window.scrollY));
 
-// Chapters are sticky, so their live position is unreliable: stack their heights instead
 const measureChapters = () => {
-    const visibleHeight = window.innerHeight - stickyOffset;
-    let y = chaptersWrapper.getBoundingClientRect().top + window.scrollY - stickyOffset;
+    const maxScroll = ScrollTrigger.maxScroll(window);
+    const firstTop = chapters[0].getBoundingClientRect().top + window.scrollY;
 
-    // The top of the page is always a resting point (on mobile it shows the full-screen logo)
-    const snapPoints = y > 0 ? [0] : [];
+    // The top of the page is a resting point too (on mobile, the logo sits above the chapters)
+    const snapPoints = firstTop > 0 ? [0] : [];
     freeRanges = [];
-    freeZoneBuffer = visibleHeight * FREE_ZONE_BUFFER;
+    freeZoneBuffer = window.innerHeight * FREE_ZONE_BUFFER;
 
     chapters.forEach((chapter) => {
-        const excess = chapter.offsetHeight - visibleHeight;
-        snapPoints.push(y);
+        const top = chapter.getBoundingClientRect().top + window.scrollY;
+        const excess = chapter.offsetHeight - window.innerHeight;
+        snapPoints.push(top);
 
         if (excess > 1) {
-            snapPoints.push(y + excess);
-            freeRanges.push([y, y + excess]);
+            snapPoints.push(top + excess);
+            freeRanges.push([top, top + excess]);
         }
-
-        y += chapter.offsetHeight;
     });
 
-    const maxScroll = ScrollTrigger.maxScroll(window);
     snapToChapter = ScrollTrigger.snapDirectional(
         snapPoints.map((point) => gsap.utils.clamp(0, 1, point / maxScroll))
     );
@@ -123,27 +93,64 @@ ScrollTrigger.create({
     },
 });
 
-// Last section: the brand column turns black (after a short delay) as it comes in,
-// and quickly back to white when leaving upward
+/* Last chapter: the brand column turns black (after a short delay) as it comes in,
+   and quickly back to white when leaving upward.
+   On mobile the last chapter itself and the header turn black too, with white text and logo. */
+
 const cssColor = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const brandColorIn = { delay: reduceMotion ? 0 : 0.4, duration: reduceMotion ? 0 : 0.8, ease: "power2.inOut" };
 const brandColorOut = { duration: reduceMotion ? 0 : 0.3, ease: "power2.out" };
 
-ScrollTrigger.create({
-    trigger: chapters[chapters.length - 1],
-    start: "top center",
+const mobileQuery = window.matchMedia("(max-width: 768px)");
+const header = document.querySelector(".header");
+const logoHeader = document.querySelector(".logo-header");
+const lastChapterLinks = lastChapter.querySelectorAll("a");
+let lastChapterActive = false;
+
+// Each target with its dark and light values (only the brand column changes on desktop)
+const lastChapterTheme = (dark) => {
+    const black = cssColor("--color-black");
+    const white = cssColor("--color-white");
+    const themes = [[brand, { backgroundColor: dark ? black : white }]];
+
+    if (mobileQuery.matches) {
+        themes.push(
+            [lastChapter, { backgroundColor: dark ? black : white, color: dark ? white : black }],
+            [lastChapterLinks, { "--link-color": dark ? white : black }],
+            [header, { backgroundColor: dark ? black : white }],
+            [logoHeader, { fill: dark ? white : black }]
+        );
+    }
+    return themes;
+};
+
+const applyLastChapterTheme = (dark) => {
+    lastChapterActive = dark;
+    const timing = dark ? brandColorIn : brandColorOut;
     // overwrite: "auto" also cancels a pending delayed change if the direction flips quickly
-    onEnter: () =>
-        gsap.to(brand, { backgroundColor: cssColor("--color-black"), ...brandColorIn, overwrite: "auto" }),
-    onLeaveBack: () =>
-        gsap.to(brand, { backgroundColor: cssColor("--color-white"), ...brandColorOut, overwrite: "auto" }),
+    lastChapterTheme(dark).forEach(([target, colors]) => gsap.to(target, { ...colors, ...timing, overwrite: "auto" }));
+};
+
+ScrollTrigger.create({
+    trigger: lastChapter,
+    start: "top center",
+    onEnter: () => applyLastChapterTheme(true),
+    onLeaveBack: () => applyLastChapterTheme(false),
 });
 
-chapters.forEach((chapter) => {
-    const inner = chapter.querySelector(".chapter-inner");
+// Crossing the mobile breakpoint: drop the mobile-only colors, or apply them at once if needed
+mobileQuery.addEventListener("change", () => {
+    gsap.set([lastChapter, lastChapterLinks, header, logoHeader], {
+        clearProps: "backgroundColor,color,fill,--link-color",
+    });
+    lastChapterTheme(lastChapterActive).forEach(([target, colors]) => gsap.set(target, colors));
+});
 
-    if (!reduceMotion) {
-        gsap.from(inner, {
+/* Chapter content fades up as each chapter scrolls into view */
+
+if (!reduceMotion) {
+    chapters.forEach((chapter) => {
+        gsap.from(chapter.querySelector(".chapter-inner"), {
             autoAlpha: 0,
             y: 40,
             duration: 1,
@@ -154,18 +161,17 @@ chapters.forEach((chapter) => {
                 toggleActions: "play none none reverse",
             },
         });
-    }
-});
+    });
+}
 
 /* Logo parallax: each bar drifts by its data-speed (in logo units) as the page scrolls.
-   While the last section scrolls in, every bar exits through the top, leaving the column empty. */
+   While the last chapter scrolls in, every bar exits through the top, leaving the column empty. */
 
 if (!reduceMotion) {
     // Multiplies every data-speed: higher = bars travel further (faster) for the same scroll
     const PARALLAX_STRENGTH = 2;
     const logoSvg = document.querySelector(".logo-animation svg");
     const logoParts = gsap.utils.toArray(".logo-animation svg [data-speed]");
-    const lastChapter = chapters[chapters.length - 1];
     const maxSpeed = Math.max(...logoParts.map((part) => Math.abs(parseFloat(part.dataset.speed))));
     let parallax;
 
@@ -173,7 +179,7 @@ if (!reduceMotion) {
     const exitDistance = (part) => {
         const svgRect = logoSvg.getBoundingClientRect();
         const scale = svgRect.height / logoSvg.viewBox.baseVal.height;
-        if (!scale) return 0; // logo not laid out (hidden or zero-size): nothing to move yet
+        if (!scale) return 0; // logo not laid out (hidden or zero-size): nothing to move
         const svgTopInColumn = (svgRect.top - brand.getBoundingClientRect().top) / scale;
         const box = part.getBBox();
         return -(svgTopInColumn + box.y + box.height + 20);
@@ -186,7 +192,7 @@ if (!reduceMotion) {
         }
         gsap.set(logoParts, { y: 0 });
 
-        // Share of the page scroll spent bringing in the last section
+        // Share of the page scroll spent bringing in the last chapter
         const exitShare = gsap.utils.clamp(0.05, 0.5, lastChapter.offsetHeight / ScrollTrigger.maxScroll(window));
         const exitStart = 1 - exitShare;
 
@@ -201,12 +207,12 @@ if (!reduceMotion) {
         });
 
         logoParts.forEach((part) => {
-            const speed = parseFloat(part.dataset.speed) * PARALLAX_STRENGTH;
+            const speed = parseFloat(part.dataset.speed);
             // Faster bars leave first; all are gone just before the end of the page
             const delay = exitShare * 0.3 * (1 - Math.abs(speed) / maxSpeed);
 
             parallax
-                .to(part, { y: speed, ease: "sine.inOut", duration: exitStart }, 0)
+                .to(part, { y: speed * PARALLAX_STRENGTH, ease: "sine.inOut", duration: exitStart }, 0)
                 .to(
                     part,
                     { y: exitDistance(part), ease: "power2.in", duration: exitShare * 0.9 - delay },
