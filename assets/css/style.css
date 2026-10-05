@@ -10,6 +10,7 @@ body {
 }
 
 body {
+    position: relative;
     color: var(--color-black);
     background-color: var(--color-white);
 }
@@ -39,6 +40,32 @@ em {
 .logo-header {
     height: 1.5rem;
     fill: var(--color-black);
+}
+
+.footer {
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: space-between;
+    -ms-flex-pack: between;
+    justify-content: space-between;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 2rem 5vw;
+}
+
+.footer-menu {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .layout {
@@ -187,6 +214,23 @@ em {
     line-height: 1.5;
 }
 
+/* Subheadings and bullet lists in long texts (e.g. the privacy policy) */
+.content-section-note h3 {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.content-section-note ul {
+    padding-left: 1.25rem;
+    list-style: disc;
+}
+
+.content-section-note strong {
+    font-weight: 700;
+}
+
+.footer-menu a,
 .content-section-text a,
 .content-section-note a {
     --link-color: var(--color-black);
@@ -210,6 +254,8 @@ em {
         color 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+.footer-menu a:link,
+.footer-menu a:visited,
 .content-section-text a:link,
 .content-section-text a:visited,
 .content-section-note a:link,
@@ -217,6 +263,8 @@ em {
     color: var(--link-color);
 }
 
+.footer-menu a:hover,
+.footer-menu a:focus-visible,
 .content-section-text a:hover,
 .content-section-text a:focus-visible,
 .content-section-note a:hover,
@@ -225,6 +273,7 @@ em {
     background-size: 0 1px, 100% 0;
 }
 
+.footer-menu a:focus-visible,
 .content-section-text a:focus-visible,
 .content-section-note a:focus-visible {
     outline: 2px solid var(--link-color);
@@ -233,6 +282,7 @@ em {
 
 @media (prefers-reduced-motion: reduce) {
 
+    .footer-menu a,
     .content-section-text a,
     .content-section-note a {
         -webkit-transition: none;
@@ -316,6 +366,21 @@ em {
         display: none;
     }
 
+    .footer {
+        width: 100%;
+        padding: 1rem 3rem;
+    }
+
+    .footer-menu {
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .footer-menu a {
+        --link-color: var(--color-white);
+        --link-hover-text: var(--color-grey);
+    }
+
     .layout {
         -ms-grid-columns: 1fr;
         grid-template-columns: 1fr;
@@ -346,6 +411,10 @@ em {
 
     .content-section:not(:last-of-type) {
         min-height: unset;
+    }
+
+    .content-section:last-of-type {
+        padding-bottom: 7rem;
     }
 
     .content-section-inner {
