@@ -9,6 +9,15 @@ body {
     font-style: normal;
 }
 
+body {
+    color: var(--color-black);
+    background-color: var(--color-white);
+}
+
+em {
+    font-style: italic;
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -16,11 +25,6 @@ body {
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
-}
-
-body {
-    color: var(--color-black);
-    background-color: var(--color-white);
 }
 
 .header {
