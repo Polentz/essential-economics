@@ -244,6 +244,7 @@ em {
 .footer-menu a,
 .content-section-text a,
 .content-section-note a,
+.subscribe-form-consent a,
 .content-section-list a {
     --link-color: var(--color-black);
     --link-hover-text: var(--color-grey);
@@ -272,6 +273,8 @@ em {
 .content-section-text a:visited,
 .content-section-note a:link,
 .content-section-note a:visited,
+.subscribe-form-consent a:link,
+.subscribe-form-consent a:visited,
 .content-section-list a:link,
 .content-section-list a:visited {
     color: var(--link-color);
@@ -283,6 +286,8 @@ em {
 .content-section-text a:focus-visible,
 .content-section-note a:hover,
 .content-section-note a:focus-visible,
+.subscribe-form-consent a:hover,
+.subscribe-form-consent a:focus-visible,
 .content-section-list a:hover,
 .content-section-list a:focus-visible {
     color: var(--link-hover-text);
@@ -292,6 +297,7 @@ em {
 .footer-menu a:focus-visible,
 .content-section-text a:focus-visible,
 .content-section-note a:focus-visible,
+.subscribe-form-consent a:focus-visible,
 .content-section-list a:focus-visible {
     outline: 2px solid var(--link-color);
     outline-offset: 4px;
@@ -302,6 +308,7 @@ em {
     .footer-menu a,
     .content-section-text a,
     .content-section-note a,
+    .subscribe-form-consent a,
     .content-section-list a {
         -webkit-transition: none;
         transition: none;
@@ -360,6 +367,29 @@ em {
     border-bottom-color: var(--color-black);
     -webkit-box-shadow: 0 1px 0 var(--color-black);
     box-shadow: 0 1px 0 var(--color-black);
+}
+
+/* Consent checkbox: box on the left, text wrapping beside it */
+.subscribe-form-consent {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.subscribe-form .subscribe-form-consent input {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.1875rem;
+    border: 0;
+    accent-color: var(--color-black);
+    cursor: pointer;
 }
 
 /* Spam trap: kept out of sight but still in the form for bots to fill */

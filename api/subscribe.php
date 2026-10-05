@@ -38,6 +38,9 @@ if (mb_strlen($name) > 100 || preg_match('/[\r\n]/', $name)) {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 254) {
     respond(422, 'Please enter a valid email address.');
 }
+if (($_POST['consent'] ?? '') !== '1') {
+    respond(422, 'Please tick the box to confirm that you agree to receive our newsletter.');
+}
 
 if (isRateLimited($_SERVER['REMOTE_ADDR'] ?? 'unknown', $config['rate_limit_per_hour'] ?? 5)) {
     respond(429, 'Too many attempts. Please try again later.');

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Essential Economics</title>
-    <meta name="description" content="">
+    <meta name="description"
+        content="Essential Economics is a research institute in the making. Our ambition is research that turns the economics of essentials into concrete policy proposals.">
     <link rel="stylesheet" href="https://use.typekit.net/aqq5tpq.css">
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/variables.css">
@@ -143,11 +144,10 @@
                         <form class="subscribe-form" action="api/subscribe.php" method="post">
                             <div class="subscribe-form-field">
                                 <label for="subscribe-name">Name</label>
-                                <input type="text" id="subscribe-name" name="name" autocomplete="name" maxlength="100"
-                                    required>
+                                <input type="text" id="subscribe-name" name="name" autocomplete="name" maxlength="100">
                             </div>
                             <div class="subscribe-form-field">
-                                <label for="subscribe-email">Email</label>
+                                <label for="subscribe-email">Email *</label>
                                 <input type="email" id="subscribe-email" name="email" autocomplete="email" required>
                             </div>
                             <!-- Honeypot: hidden from people, ticked by spam bots. A checkbox, because browser
@@ -156,15 +156,16 @@
                                 <input type="checkbox" id="subscribe-hp" name="hp_check" value="1" tabindex="-1">
                                 <label for="subscribe-hp">Leave this unchecked</label>
                             </div>
+                            <div class="subscribe-form-consent">
+                                <input type="checkbox" id="subscribe-consent" name="consent" value="1" required>
+                                <label for="subscribe-consent">I agree to receive the Essential Economics newsletter
+                                    and consent to Essential Economics processing the data from this form for that
+                                    purpose. I can unsubscribe at any time. Learn more in our
+                                    <a href="privacy-policy.html">Privacy Policy</a>.</label>
+                            </div>
                             <button type="submit" class="button">Subscribe</button>
                             <p class="subscribe-form-status" role="status" aria-live="polite"></p>
                         </form>
-                        <div class="content-section-note">
-                            <p>By subscribing to our newsletter, you consent to Essential Economics collecting data from
-                                this form and receiving emails from us. You can unsubscribe
-                                at any time. Learn more by reading our <a href="privacy-policy.html">Privacy Policy</a>.
-                            </p>
-                        </div>
                     </div>
                 </section>
 
