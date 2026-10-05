@@ -264,3 +264,42 @@ gsap.utils.toArray("[data-preview]").forEach((link) => {
     link.addEventListener("focus", show);
     link.addEventListener("blur", hide);
 });
+
+/* Subscribe form: sends in the background to api/subscribe.php and shows the result below the button.
+   Without JavaScript the form still posts normally and the page reloads with ?subscribe=success|error. */
+
+const subscribeForm = document.querySelector(".subscribe-form");
+
+if (subscribeForm) {
+    const status = subscribeForm.querySelector(".subscribe-form-status");
+    const button = subscribeForm.querySelector("button[type='submit']");
+    const errorMessage = "Sorry, something went wrong. Please try again later.";
+
+    subscribeForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        subscribeForm.classList.add("is-sending");
+        button.disabled = true;
+        status.textContent = "Sending…";
+
+        try {
+            const response = await fetch(subscribeForm.action, {
+                method: "POST",
+                headers: { Accept: "application/json" },
+                body: new FormData(subscribeForm),
+            });
+            const result = await response.json();
+            status.textContent = result.message;
+            if (result.ok) subscribeForm.reset();
+        } catch {
+            status.textContent = errorMessage;
+        } finally {
+            subscribeForm.classList.remove("is-sending");
+            button.disabled = false;
+        }
+    });
+
+    // Result of a no-JavaScript submission
+    const result = new URLSearchParams(window.location.search).get("subscribe");
+    if (result === "success") status.textContent = "Thank you! Please check your inbox and click the link to confirm your subscription.";
+    if (result === "error") status.textContent = errorMessage;
+}

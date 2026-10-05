@@ -1,0 +1,4 @@
+# Only the subscribe endpoint is reachable from the web; config files stay private
+<FilesMatch "^(config|config\.example)\.php$">
+    Require all denied
+</FilesMatch>

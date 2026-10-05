@@ -329,6 +329,28 @@ em {
     box-shadow: 0 1px 0 var(--color-black);
 }
 
+/* Spam trap: kept out of sight but still in the form for bots to fill */
+.subscribe-form-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.subscribe-form-status {
+    font-size: 1rem;
+}
+
+.subscribe-form-status:empty {
+    display: none;
+}
+
+.subscribe-form.is-sending .button {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .button {
     -ms-flex-item-align: start;
     align-self: flex-start;
